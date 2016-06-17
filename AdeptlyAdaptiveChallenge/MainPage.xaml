@@ -9,13 +9,34 @@
     xmlns:data="using:AdeptlyAdaptiveChallenge.Models"
     Loaded="Page_Loaded">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="NarrowLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SearchBox.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="WideLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SearchBox.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
         <RelativePanel Grid.Row="0">
             <Button FontFamily="Segoe MDL2 Assets" 
                     Content="&#xE700;" 
@@ -32,6 +53,7 @@
                             HorizontalAlignment="Left"
                             RelativePanel.AlignRightWithPanel="True" 
                             QueryIcon="Find"
+                            Name="SearchBox"
                             Width="150"></AutoSuggestBox>
         </RelativePanel>
 
@@ -69,21 +91,12 @@
                 </ListBox>
             </SplitView.Pane>
             <SplitView.Content>
-                <GridView  Name="newsItemGrid" ItemsSource="{x:Bind NewsItem}">
+                <GridView  Name="newsItemGrid" 
+                           Background="LightGray"
+                           ItemsSource="{x:Bind NewsItem}">
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="data:NewsItem">
-                            <Grid Height="275" Width="200" Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Image Name="NewsImage" Source="{x:Bind Image}"/>
-                                <RelativePanel Grid.Row="1">
-                                    <TextBlock Text="{x:Bind Headline}"/>
-                                    <TextBlock Text="{x:Bind Subhead}"/>
-                                    <TextBlock Text="{x:Bind DateLine}"/>
-                                </RelativePanel>
-                            </Grid>
+                            <local:NewsItemControl/>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
